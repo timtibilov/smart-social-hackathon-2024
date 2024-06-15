@@ -1,12 +1,39 @@
+from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.models import Event, db
+from app.models import Event, EventDate, db
 
 bp = Blueprint('event', __name__, url_prefix='/events')
 
 @bp.route('/')
 def index():
-    events = Event.query.all()
+    filter_type = request.args.get('filter', 'all')  # по умолчанию 'all'
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+
+    events = Event.query
+
+    # Фильтрация по статусу (прошедшие/текущие)
+    if filter_type == 'past':
+        events = events.filter(EventDate.date_time < datetime.now())
+    elif filter_type == 'current':
+        events = events.filter(EventDate.date_time >= datetime.now())
+
+    # Фильтрация по цене
+    if min_price:
+        events = events.filter(EventDate.price >= float(min_price))
+    if max_price:
+        events = events.filter(EventDate.price <= float(max_price))
+
+    # Фильтрация по дате
+    if start_date:
+        events = events.filter(EventDate.date_time >= datetime.strptime(start_date, '%Y-%m-%d'))
+    if end_date:
+        events = events.filter(EventDate.date_time <= datetime.strptime(end_date, '%Y-%m-%d'))
+
+    events = events.all()
     return render_template('event/list.html', events=events)
 
 @bp.route('/create', methods=['GET', 'POST'])

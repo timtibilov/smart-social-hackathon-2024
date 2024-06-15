@@ -30,6 +30,7 @@ class EventDate(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     date_time = db.Column(db.DateTime, nullable=False)
     available_seats = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False, default=0.0)  # Добавляем поле price
     event = db.relationship('Event', back_populates='dates')
 
 class Registration(db.Model):
