@@ -1,28 +1,33 @@
 {% extends "base.html" %}
 {% block title %} Create Registration {% endblock %}
 {% block content %}
+<div class="container mt-5">
     <h2>Create Registration</h2>
 
-    <form method="GET" action="{{ url_for('registration.create') }}">
-        <div>
-            <label for="q">Search Event:</label>
-            <input type="text" name="q" id="q" value="{{ request.args.get('q', '') }}">
-            <button type="submit">Search</button>
+    <form method="GET" action="{{ url_for('registration.create') }}" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label for="q" class="form-label">Search Event:</label>
+                <input type="text" name="q" id="q" value="{{ request.args.get('q', '') }}" class="form-control">
+            </div>
+            <div class="col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
         </div>
     </form>
 
-    <form method="POST">
-        <div>
-            <label for="event_id">Event:</label>
-            <select id="event_id" name="event_id" required>
+    <form method="POST" class="row g-3">
+        <div class="col-md-6">
+            <label for="event_id" class="form-label">Event:</label>
+            <select id="event_id" name="event_id" class="form-select" required>
                 {% for event in events %}
                     <option value="{{ event.id }}">{{ event.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        <div>
-            <label for="event_date_id">Event Date:</label>
-            <select id="event_date_id" name="event_date_id" required>
+        <div class="col-md-6">
+            <label for="event_date_id" class="form-label">Event Date:</label>
+            <select id="event_date_id" name="event_date_id" class="form-select" required>
                 {% for event in events %}
                     {% for date in event.dates %}
                         <option value="{{ date.id }}">{{ date.date_time }}</option>
@@ -30,18 +35,21 @@
                 {% endfor %}
             </select>
         </div>
-        <div>
-            <label for="visitor_name">Visitor Name:</label>
-            <input type="text" id="visitor_name" name="visitor_name" required>
+        <div class="col-md-6">
+            <label for="visitor_name" class="form-label">Visitor Name:</label>
+            <input type="text" id="visitor_name" name="visitor_name" class="form-control" required>
         </div>
-        <div>
-            <label for="visitor_email">Visitor Email:</label>
-            <input type="email" id="visitor_email" name="visitor_email" required>
+        <div class="col-md-6">
+            <label for="visitor_email" class="form-label">Visitor Email:</label>
+            <input type="email" id="visitor_email" name="visitor_email" class="form-control" required>
         </div>
-        <div>
-            <label for="visitor_phone">Visitor Phone:</label>
-            <input type="phone" id="visitor_phone" name="visitor_phone" required>
+        <div class="col-md-6">
+            <label for="visitor_phone" class="form-label">Visitor Phone:</label>
+            <input type="text" id="visitor_phone" name="visitor_phone" class="form-control" required>
         </div>
-        <button type="submit">Create</button>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Create</button>
+        </div>
     </form>
+</div>
 {% endblock %}

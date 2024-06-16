@@ -1,33 +1,39 @@
 {% extends "../base.html" %}
 {% block title %}Refund Requests{% endblock %}
 {% block content %}
-    <h2>Refund Requests</h2>
+    <div class="container mt-4">
+        <h2 class="mb-4">Refund Requests</h2>
 
-    <table>
-        <tr>
-            <th>Order ID</th>
-            <th>Visitor Name</th>
-            <th>Event</th>
-            <th>Requested At</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        {% for request in refund_requests %}
-        <tr>
-            <td>{{ request.order.id }}</td>
-            <td>{{ request.order.visitor_name }}</td>
-            <td>{{ request.order.event.name }}</td>
-            <td>{{ request.requested_at }}</td>
-            <td>{{ request.status }}</td>
-            <td>
-                {% if request.status == 'pending' %}
-                    <a href="{{ url_for('staff.approve_refund', request_id=request.id) }}">Approve</a>
-                    <a href="{{ url_for('staff.reject_refund', request_id=request.id) }}">Reject</a>
-                {% else %}
-                    {{ request.status }} on {{ request.reviewed_at }}
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Visitor Name</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Requested At</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in refund_requests %}
+                <tr>
+                    <td>{{ request.order.id }}</td>
+                    <td>{{ request.order.visitor_name }}</td>
+                    <td>{{ request.order.event.name }}</td>
+                    <td>{{ request.requested_at }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>
+                        {% if request.status == 'pending' %}
+                            <a href="{{ url_for('staff.approve_refund', request_id=request.id) }}" class="btn btn-success btn-sm me-1">Approve</a>
+                            <a href="{{ url_for('staff.reject_refund', request_id=request.id) }}" class="btn btn-danger btn-sm">Reject</a>
+                        {% else %}
+                            {{ request.status }} on {{ request.reviewed_at }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

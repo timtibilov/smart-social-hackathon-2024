@@ -10,39 +10,6 @@ def index():
     registrations = Registration.query.all()
     return render_template('registration/list.html', registrations=registrations)
 
-@bp.route('/create', methods=['GET', 'POST'])
-@login_required
-def create():
-    search_query = request.args.get('q')
-    events = Event.query
-    
-    if search_query:
-        events = events.filter((Event.name.ilike(f'%{search_query}%')) | (Event.description.ilike(f'%{search_query}%')))
-
-    events = events.all()
-    
-    if request.method == 'POST':
-        event_id = request.form['event_id']
-        event_date_id = request.form['event_date_id']
-        visitor_name = request.form['visitor_name']
-        visitor_email = request.form['visitor_email']
-        visitor_phone = request.form['visitor_phone']
-
-        registration = Registration(
-            event_id=event_id,
-            status='registered',
-            event_date_id=event_date_id,
-            visitor_name=visitor_name,
-            visitor_email=visitor_email,
-            visitor_phone=visitor_phone
-        )
-        db.session.add(registration)
-        db.session.commit()
-        flash('Registration created successfully!', 'success')
-        return redirect(url_for('registration.index'))
-
-    return render_template('registration/create.html', events=events)
-
 @bp.route('/<int:registration_id>')
 @login_required
 def detail(registration_id):

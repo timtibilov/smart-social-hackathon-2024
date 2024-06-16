@@ -1,33 +1,35 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 {% block title %}Edit Order{% endblock %}
 {% block content %}
-    <h2>Edit Order #{{ order.id }}</h2>
+    <div class="container mt-4">
+        <h2 class="mb-4">Edit Order #{{ order.id }}</h2>
 
-    <form method="POST">
-        <div>
-            <label for="event_date_id">Event Date: {{ order.event_date.date_time }}</label>
-            <select id="event_date_id" name="event_date_id" required>
-                {% for date in order.event.dates %}
-                    <option value="{{ date.id }}">{{ date.date_time }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label for="visitor_name">Visitor Name: {{ order.visitor_name }}</label>
-            <input type="text" id="visitor_name" name="visitor_name" value="{{ order.visitor_name }}" required>
-        </div>
-        <div>
-            <label for="visitor_email">Visitor Email: {{ order.visitor_email }}</label>
-            <input type="email" id="visitor_email" name="visitor_email" value="{{ order.visitor_email }}" required>
-        </div>
-        <div>
-            <label for="visitor_phone">Visitor Phone: {{ order.visitor_phone }}</label>
-            <input type="text" id="visitor_phone" name="visitor_phone" value="{{ order.visitor_phone }}" required>
-        </div>
-        <div>
-            <label for="ticket_count">Ticket Count: {{ order.ticket_count }}</label>
-            <input type="number" id="ticket_count" name="ticket_count" max="5" value="{{ order.ticket_count }}" required>
-        </div>
-        <button type="submit">Update Order</button>
-    </form>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="event_date_id" class="form-label">Event Date: {{ order.event_date.date_time }}</label>
+                <select id="event_date_id" name="event_date_id" class="form-select" required>
+                    {% for date in order.event.dates %}
+                        <option value="{{ date.id }}" {% if date.id == order.event_date.id %}selected{% endif %}>{{ date.date_time }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="visitor_name" class="form-label">Visitor Name</label>
+                <input type="text" id="visitor_name" name="visitor_name" value="{{ order.visitor_name }}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="visitor_email" class="form-label">Visitor Email</label>
+                <input type="email" id="visitor_email" name="visitor_email" value="{{ order.visitor_email }}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="visitor_phone" class="form-label">Visitor Phone</label>
+                <input type="text" id="visitor_phone" name="visitor_phone" value="{{ order.visitor_phone }}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ticket_count" class="form-label">Ticket Count</label>
+                <input type="number" id="ticket_count" name="ticket_count" max="5" value="{{ order.ticket_count }}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Order</button>
+        </form>
+    </div>
 {% endblock %}

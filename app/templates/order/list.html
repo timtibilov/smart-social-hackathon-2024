@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Список заказов{% endblock %}
+{% block content %}
+<form method="GET" action="{{ url_for('staff.index') }}" class="mb-4">
+    <div class="mb-3">
+        <label for="visitor_name" class="form-label">Имя посетителя:</label>
+        <input type="text" id="visitor_name" name="visitor_name" value="{{ request.args.get('visitor_name', '') }}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="visitor_phone" class="form-label">Телефон посетителя:</label>
+        <input type="text" id="visitor_phone" name="visitor_phone" value="{{ request.args.get('visitor_phone', '') }}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="visitor_email" class="form-label">Почта посетителя:</label>
+        <input type="text" id="visitor_email" name="visitor_email" value="{{ request.args.get('visitor_email', '') }}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="status" class="form-label">Статус:</label>
+        <select id="status" name="status" class="form-select">
+            <option value="">Все</option>
+            <option value="pending" {% if request.args.get('status') == 'pending' %}selected{% endif %}>В ожидании</option>
+            <option value="confirmed" {% if request.args.get('status') == 'confirmed' %}selected{% endif %}>Подтвержден</option>
+            <option value="cancelled" {% if request.args.get('status') == 'cancelled' %}selected{% endif %}>Отменен</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="created_at" class="form-label">Дата создания:</label>
+        <input type="date" id="created_at" name="created_at" value="{{ request.args.get('created_at', '') }}" class="form-control">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Фильтровать</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID заказа</th>
+            <th>ID мероприятия</th>
+            <th>Дата мероприятия</th>
+            <th>Имя посетителя</th>
+            <th>Почта посетителя</th>
+            <th>Телефон посетителя</th>
+            <th>Количество билетов</th>
+            <th>Статус</th>
+            <th>Создано</th>
+            <th>Срок действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.event_id }}</td>
+            <td>{{ order.event_date.date_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ order.visitor_name }}</td>
+            <td>{{ order.visitor_email }}</td>
+            <td>{{ order.visitor_phone }}</td>
+            <td>{{ order.ticket_count }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ order.expires_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

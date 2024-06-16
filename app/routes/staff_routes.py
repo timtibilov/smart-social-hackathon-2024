@@ -1,8 +1,8 @@
-from datetime import timezone
+from datetime import timezone, timedelta
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.models import Order, RefundRequest, db
-from app.utils import confirm_token
+from app.models import Order, RefundRequest, Event, EventDate, db
+from app.utils import confirm_token, send_aproval_email, send_rejection_email
 from datetime import datetime
 
 bp = Blueprint('staff', __name__, url_prefix='/staff')
@@ -50,3 +50,40 @@ def request_refund(token):
         return redirect(url_for('order.detail', order_id=order.id))
     
     return render_template('order/request_refund.html', order=order)
+
+@bp.route('/')
+@login_required
+def index():
+    query = Order.query
+
+    visitor_name = request.args.get('visitor_name')
+    visitor_phone = request.args.get('visitor_phone')
+    visitor_email = request.args.get('visitor_email')
+    status = request.args.get('status')
+    created_at = request.args.get('created_at')
+
+    filters = []
+
+    if visitor_name:
+        filters.append(Order.visitor_name.ilike(f'%{visitor_name}%'))
+    if visitor_phone:
+        filters.append(Order.visitor_phone.ilike(f'%{visitor_phone}%'))
+    if visitor_email:
+        filters.append(Order.visitor_email.ilike(f'%{visitor_email}%'))
+    if status:
+        filters.append(Order.status == status)
+    if created_at:
+        try:
+            created_at_dt = datetime.strptime(created_at, '%Y-%m-%d')
+            filters.append(
+                Order.created_at >= created_at_dt and Order.created_at < created_at_dt + timedelta(days=1)
+            )
+        except ValueError:
+            pass  # Handle invalid date format if necessary
+    
+    if filters:
+        query = query.filter(all(*filters))
+    
+    orders = query.all()
+
+    return render_template('orders/list.html', orders=orders)
