@@ -13,6 +13,7 @@ class EventImage(db.Model):
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=False)
     place = db.Column(db.String(120), nullable=False)
@@ -25,49 +26,16 @@ class EventDate(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     date_time = db.Column(db.DateTime, nullable=False)
     available_seats = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Float, nullable=False, default=0.0)  # Добавляем поле price
+    price = db.Column(db.Float, nullable=False, default=0.0)
     event = db.relationship('Event', back_populates='dates')
 
-class Exhibit(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-    name = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    event = db.relationship('Event', back_populates='exhibits')
-
-class Guide(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-    type = db.Column(db.String(10), nullable=False)  # 'audio' or 'text'
-    content = db.Column(db.Text, nullable=False)
-    event = db.relationship('Event', back_populates='guides')
-
-class Registration(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-    event_date_id = db.Column(db.Integer, db.ForeignKey('event_date.id'), nullable=False)
-    visitor_name = db.Column(db.String(120), nullable=False)
-    visitor_email = db.Column(db.String(120), nullable=False)
-    visitor_phone = db.Column(db.String(20), nullable=False)
-    status = db.Column(db.String(15), nullable=False)  # 'registered' or 'canceled'
-
-    event = db.relationship('Event')
-    event_date = db.relationship('EventDate')
-
-class Payment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    registration_id = db.Column(db.Integer, db.ForeignKey('registration.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    payment_method = db.Column(db.String(20), nullable=False)
-    status = db.Column(db.String(15), nullable=False)  # 'pending', 'completed' or 'failed'
-    registration = db.relationship('Registration', back_populates='payments')
-
-class Customer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), nullable=False, unique=True)
-    phone = db.Column(db.String(20), nullable=True)
-    registrations = db.relationship('Registration', back_populates='customer')
+# class Payment(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     registration_id = db.Column(db.Integer, db.ForeignKey('registration.id'), nullable=False)
+#     amount = db.Column(db.Float, nullable=False)
+#     payment_method = db.Column(db.String(20), nullable=False)
+#     status = db.Column(db.String(15), nullable=False)  # 'pending', 'completed' or 'failed'
+#     registration = db.relationship('Registration', back_populates='payments')
 
 class MuseumStaff(db.Model):
     id = db.Column(db.Integer, primary_key=True)

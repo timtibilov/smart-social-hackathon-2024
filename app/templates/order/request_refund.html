@@ -1,16 +1,20 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 {% block title %}Request Refund{% endblock %}
 {% block content %}
-    <h2>Request Refund for Order #{{ order.id }}</h2>
+    <div class="container mt-4">
+        <h2 class="mb-4">Request Refund for Order #{{ order.id }}</h2>
 
-    <p>Event: {{ order.event.name }}</p>
-    <p>Event Date: {{ order.event_date.date_time }}</p>
-    <p>Visitor Name: {{ order.visitor_name }}</p>
-    <p>Visitor Email: {{ order.visitor_email }}</p>
-    <p>Visitor Phone: {{ order.visitor_phone }}</p>
-    <p>Ticket Count: {{ order.ticket_count }}</p>
+        <div class="mb-3">
+            <p><strong>Event:</strong> {{ order.event.name }}</p>
+            <p><strong>Event Date:</strong> {{ order.event_date.date_time }}</p>
+            <p><strong>Visitor Name:</strong> {{ order.visitor_name }}</p>
+            <p><strong>Visitor Email:</strong> {{ order.visitor_email }}</p>
+            <p><strong>Visitor Phone:</strong> {{ order.visitor_phone }}</p>
+            <p><strong>Ticket Count:</strong> {{ order.ticket_count }}</p>
+        </div>
 
-    <form method="POST">
-        <button type="submit" style="background-color: red; color: white;">Request Refund</button>
-    </form>
+        <form method="POST">
+            <button type="submit" class="btn btn-danger">Request Refund</button>
+        </form>
+    </div>
 {% endblock %}

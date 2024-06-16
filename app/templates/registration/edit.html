@@ -1,38 +1,40 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 {% block title %}Edit Registration{% endblock %}
 {% block content %}
-    <h2>Edit Registration for {{ registration.visitor_name }}</h2>
-    <form method="POST">
-        <div>
-            <label for="event_id">Event:</label>
-            <select id="event_id" name="event_id" required>
-                {% for event in events %}
-                    <option value="{{ event.id }}" {% if event.id == registration.event_id %}selected{% endif %}>{{ event.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label for="event_date_id">Event Date:</label>
-            <select id="event_date_id" name="event_date_id" required>
-                {% for event in events %}
-                    {% for date in event.dates %}
-                        <option value="{{ date.id }}" {% if date.id == registration.event_date_id %}selected{% endif %}>{{ date.date_time }}</option>
+    <div class="container mt-4">
+        <h2 class="mb-4">Edit Registration for {{ registration.visitor_name }}</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="event_id" class="form-label">Event:</label>
+                <select id="event_id" name="event_id" class="form-select" required>
+                    {% for event in events %}
+                        <option value="{{ event.id }}" {% if event.id == registration.event_id %}selected{% endif %}>{{ event.name }}</option>
                     {% endfor %}
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label for="visitor_name">Visitor Name:</label>
-            <input type="text" id="visitor_name" name="visitor_name" value="{{ registration.visitor_name }}" required>
-        </div>
-        <div>
-            <label for="visitor_email">Visitor Email:</label>
-            <input type="email" id="visitor_email" name="visitor_email" value="{{ registration.visitor_email }}" required>
-        </div>
-        <div>
-            <label for="visitor_phone">Visitor Phone:</label>
-            <input type="phone" id="visitor_phone" name="visitor_phone" value="{{ registration.visitor_phone }}" required>
-        </div>
-        <button type="submit">Save Changes</button>
-    </form>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="event_date_id" class="form-label">Event Date:</label>
+                <select id="event_date_id" name="event_date_id" class="form-select" required>
+                    {% for event in events %}
+                        {% for date in event.dates %}
+                            <option value="{{ date.id }}" {% if date.id == registration.event_date_id %}selected{% endif %}>{{ date.date_time }}</option>
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="visitor_name" class="form-label">Visitor Name:</label>
+                <input type="text" id="visitor_name" name="visitor_name" value="{{ registration.visitor_name }}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="visitor_email" class="form-label">Visitor Email:</label>
+                <input type="email" id="visitor_email" name="visitor_email" value="{{ registration.visitor_email }}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="visitor_phone" class="form-label">Visitor Phone:</label>
+                <input type="text" id="visitor_phone" name="visitor_phone" value="{{ registration.visitor_phone }}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
 {% endblock %}

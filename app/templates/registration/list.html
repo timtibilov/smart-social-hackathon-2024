@@ -1,20 +1,26 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 {% block title %}Registrations{% endblock %}
 {% block content %}
-    <h2>Registrations</h2>
-    <a href="{{ url_for('registration.create') }}">Create New Registration</a>
-    <ul>
-        {% for registration in registrations %}
-            <li>
-                <a href="{{ url_for('registration.detail', registration_id=registration.id) }}">
-                    {{ registration.visitor_name }} - {{ registration.event.name }}, дата: {{ registration.event_date.date_time }}
-                </a>
-                <p>Данные о посетителе: почта - {{ registration.visitor_email }}, телефон - {{ registration.visitor_phone }}</p>
-                <p>Статус: {{ registration.status }}</p>
-                <form action="{{ url_for('registration.delete', registration_id=registration.id) }}" method="POST" style="display: inline;">
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-4">
+        <h2 class="mb-4">Registrations</h2>
+        <a href="{{ url_for('registration.create') }}" class="btn btn-success mb-3">Create New Registration</a>
+        <ul class="list-group">
+            {% for registration in registrations %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">
+                            <a href="{{ url_for('registration.detail', registration_id=registration.id) }}">
+                                {{ registration.visitor_name }} - {{ registration.event.name }}, дата: {{ registration.event_date.date_time }}
+                            </a>
+                        </div>
+                        <p>Данные о посетителе: почта - {{ registration.visitor_email }}, телефон - {{ registration.visitor_phone }}</p>
+                        <p>Статус: {{ registration.status }}</p>
+                    </div>
+                    <form action="{{ url_for('registration.delete', registration_id=registration.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

@@ -1,12 +1,17 @@
 from datetime import datetime
-from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from flask_login import login_required
 from app.models import Event, EventDate, db
+from app.utils import fetch_and_parse_xml, add_events_to_db
 
 bp = Blueprint('event', __name__, url_prefix='/events')
 
 @bp.route('/')
 def index():
+    # обновляем базу данных ивентов
+    xml = fetch_and_parse_xml(current_app.config['URL_TO_PARSE'])
+    add_events_to_db(xml)
+
     filter_type = request.args.get('filter', 'all')  # по умолчанию 'all'
     min_price = request.args.get('min_price')
     max_price = request.args.get('max_price')

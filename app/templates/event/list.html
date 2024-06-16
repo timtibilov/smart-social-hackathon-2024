@@ -1,44 +1,53 @@
 {% extends "base.html" %}
 {% block title %}Event List{% endblock %}
 {% block content %}
+<div class="container mt-5">
     <h2>Events</h2>
 
-    <form method="GET" action="{{ url_for('event.index') }}">
-        <div>
-            <label for="filter">Filter by:</label>
-            <select name="filter" id="filter">
+    <form method="GET" action="{{ url_for('event.index') }}" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="filter" class="form-label">Filter by:</label>
+            <select name="filter" id="filter" class="form-select">
                 <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>Все</option>
                 <option value="past" {% if request.args.get('filter') == 'past' %}selected{% endif %}>Прошедшие</option>
                 <option value="current" {% if request.args.get('filter') == 'current' %}selected{% endif %}>Актуальные</option>
             </select>
         </div>
-        <div>
-            <label for="min_price">Min Price:</label>
-            <input type="number" step="0.01" name="min_price" id="min_price" value="{{ request.args.get('min_price', '') }}">
+        
+        <div class="col-md-4">
+            <label for="min_price" class="form-label">Min Price:</label>
+            <input type="number" step="0.01" name="min_price" id="min_price" value="{{ request.args.get('min_price', '') }}" class="form-control">
         </div>
-        <div>
-            <label for="max_price">Max Price:</label>
-            <input type="number" step="0.01" name="max_price" id="max_price" value="{{ request.args.get('max_price', '') }}">
+
+        <div class="col-md-4">
+            <label for="max_price" class="form-label">Max Price:</label>
+            <input type="number" step="0.01" name="max_price" id="max_price" value="{{ request.args.get('max_price', '') }}" class="form-control">
         </div>
-        <div>
-            <label for="start_date">Start Date:</label>
-            <input type="date" name="start_date" id="start_date" value="{{ request.args.get('start_date', '') }}">
+
+        <div class="col-md-4">
+            <label for="start_date" class="form-label">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" value="{{ request.args.get('start_date', '') }}" class="form-control">
         </div>
-        <div>
-            <label for="end_date">End Date:</label>
-            <input type="date" name="end_date" id="end_date" value="{{ request.args.get('end_date', '') }}">
+
+        <div class="col-md-4">
+            <label for="end_date" class="form-label">End Date:</label>
+            <input type="date" name="end_date" id="end_date" value="{{ request.args.get('end_date', '') }}" class="form-control">
         </div>
-        <div>
-            <label for="q">Search:</label>
-            <input type="text" name="q" id="q" value="{{ request.args.get('q', '') }}">
+
+        <div class="col-md-4">
+            <label for="q" class="form-label">Search:</label>
+            <input type="text" name="q" id="q" value="{{ request.args.get('q', '') }}" class="form-control">
         </div>
-        <button type="submit">Apply Filters</button>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
     </form>
 
-    <ul>
+    <ul class="list-group">
         {% for event in events %}
-            <li>
-                <a href="{{ url_for('event.detail', event_id=event.id) }}">{{ event.name }}</a>
+            <li class="list-group-item">
+                <h5><a href="{{ url_for('event.detail', event_id=event.id) }}">{{ event.name }}</a></h5>
                 <p>{{ event.description }}</p>
                 <p><strong>Place:</strong> {{ event.place }}</p>
                 <p><strong>Visitor Count:</strong> {{ event.visitor_count }}</p>

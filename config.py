@@ -4,6 +4,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    URL_TO_PARSE = 'https://чермо.рф/upload/iblock_rss_2.xml'
 
     MAIL_SERVER = 'yandex.ru'
     MAIL_PORT = 587
