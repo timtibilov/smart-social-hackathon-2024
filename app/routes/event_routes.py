@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from flask_login import login_required
+from sqlalchemy import func
 from app.models import Event, EventDate, Order
 from app import db
 from app.utils import fetch_and_parse_xml, add_events_to_db
@@ -98,7 +99,6 @@ def delete(event_id):
 @bp.route('/<int:event_id>/order', methods=['GET', 'POST'])
 def order(event_id):
     if request.method == 'POST':
-        event_id = request.form['event_id']
         event_date_id = request.form['event_date_id']
         visitor_name = request.form['visitor_name']
         visitor_email = request.form['visitor_email']
@@ -111,7 +111,17 @@ def order(event_id):
 
         # Проверяем, доступны ли места
         event_date = EventDate.query.get(event_date_id)
-        available_seats = event_date.available_seats - Order.query.filter_by(event_date_id=event_date_id, status='pending')
+        ordered_seats = db.session.query(
+            func.sum(Order.ticket_count)
+        ).filter(
+            Order.event_date_id == event_date_id,
+            Order.status != 'cancelled'
+        ).scalar()
+
+        if ordered_seats is None:
+            ordered_seats = 0
+
+        available_seats = event_date.available_seats - ordered_seats
 
         if ticket_count > available_seats:
             flash('Not enough seats available.', 'danger')
