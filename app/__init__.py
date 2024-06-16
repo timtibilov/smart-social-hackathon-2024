@@ -19,8 +19,8 @@ def create_app():
         
         app.register_blueprint(event_routes.bp)
         app.register_blueprint(registration_routes.bp)
-        app.register_blueprint(staff_routes.bp)
-        app.register_blueprint(payment_routes.bp)
+        # app.register_blueprint(staff_routes.bp)
+        # app.register_blueprint(payment_routes.bp)
         app.register_blueprint(auth_routes.bp)
         
         db.create_all()  # Создаем таблицы в базе данных

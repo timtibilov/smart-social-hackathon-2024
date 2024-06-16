@@ -35,19 +35,21 @@ class EventDate(db.Model):
 
 class Registration(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     event_date_id = db.Column(db.Integer, db.ForeignKey('event_date.id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    visitor_name = db.Column(db.String(120), nullable=False)
+    visitor_email = db.Column(db.String(120), nullable=False)
+    visitor_phone = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(15), nullable=False)  # 'registered' or 'canceled'
-    event_date = db.relationship('EventDate', back_populates='registrations')
-    customer = db.relationship('Customer', back_populates='registrations')
+
+    event = db.relationship('Event')
+    event_date = db.relationship('EventDate')
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     registration_id = db.Column(db.Integer, db.ForeignKey('registration.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
-    payment_method = db.Column(db.String(20),
-
-nullable=False)
+    payment_method = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(15), nullable=False)  # 'pending', 'completed' or 'failed'
     registration = db.relationship('Registration', back_populates='payments')
 
