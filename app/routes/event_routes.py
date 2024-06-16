@@ -12,7 +12,8 @@ def index():
     max_price = request.args.get('max_price')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-
+    search_query = request.args.get('q')  # Новый параметр поиска
+    
     events = Event.query
 
     # Фильтрация по статусу (прошедшие/текущие)
@@ -32,6 +33,10 @@ def index():
         events = events.filter(EventDate.date_time >= datetime.strptime(start_date, '%Y-%m-%d'))
     if end_date:
         events = events.filter(EventDate.date_time <= datetime.strptime(end_date, '%Y-%m-%d'))
+
+    # Поиск по названию и описанию
+    if search_query:
+        events = events.filter((Event.name.ilike(f'%{search_query}%')) | (Event.description.ilike(f'%{search_query}%')))
 
     events = events.all()
     return render_template('event/list.html', events=events)

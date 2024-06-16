@@ -13,7 +13,14 @@ def index():
 @bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    events = Event.query.all()
+    search_query = request.args.get('q')
+    events = Event.query
+    
+    if search_query:
+        events = events.filter((Event.name.ilike(f'%{search_query}%')) | (Event.description.ilike(f'%{search_query}%')))
+
+    events = events.all()
+    
     if request.method == 'POST':
         event_id = request.form['event_id']
         event_date_id = request.form['event_date_id']
@@ -23,8 +30,8 @@ def create():
 
         registration = Registration(
             event_id=event_id,
-            event_date_id=event_date_id,
             status='registered',
+            event_date_id=event_date_id,
             visitor_name=visitor_name,
             visitor_email=visitor_email,
             visitor_phone=visitor_phone
