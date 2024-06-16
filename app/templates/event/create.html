@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %} Create Registration {% endblock %}
+{% block content %}
+    <h2>Create Registration</h2>
+
+    <form method="GET" action="{{ url_for('registration.create') }}">
+        <div>
+            <label for="q">Search Event:</label>
+            <input type="text" name="q" id="q" value="{{ request.args.get('q', '') }}">
+            <button type="submit">Search</button>
+        </div>
+    </form>
+
+    <form method="POST">
+        <div>
+            <label for="event_id">Event:</label>
+            <select id="event_id" name="event_id" required>
+                {% for event in events %}
+                    <option value="{{ event.id }}">{{ event.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="event_date_id">Event Date:</label>
+            <select id="event_date_id" name="event_date_id" required>
+                {% for event in events %}
+                    {% for date in event.dates %}
+                        <option value="{{ date.id }}">{{ date.date_time }}</option>
+                    {% endfor %}
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="visitor_name">Visitor Name:</label>
+            <input type="text" id="visitor_name" name="visitor_name" required>
+        </div>
+        <div>
+            <label for="visitor_email">Visitor Email:</label>
+            <input type="email" id="visitor_email" name="visitor_email" required>
+        </div>
+        <div>
+            <label for="visitor_phone">Visitor Phone:</label>
+            <input type="phone" id="visitor_phone" name="visitor_phone" required>
+        </div>
+        <button type="submit">Create</button>
+    </form>
+{% endblock %}

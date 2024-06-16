@@ -1,0 +1,33 @@
+{% extends "../base.html" %}
+{% block title %}Refund Requests{% endblock %}
+{% block content %}
+    <h2>Refund Requests</h2>
+
+    <table>
+        <tr>
+            <th>Order ID</th>
+            <th>Visitor Name</th>
+            <th>Event</th>
+            <th>Requested At</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for request in refund_requests %}
+        <tr>
+            <td>{{ request.order.id }}</td>
+            <td>{{ request.order.visitor_name }}</td>
+            <td>{{ request.order.event.name }}</td>
+            <td>{{ request.requested_at }}</td>
+            <td>{{ request.status }}</td>
+            <td>
+                {% if request.status == 'pending' %}
+                    <a href="{{ url_for('staff.approve_refund', request_id=request.id) }}">Approve</a>
+                    <a href="{{ url_for('staff.reject_refund', request_id=request.id) }}">Reject</a>
+                {% else %}
+                    {{ request.status }} on {{ request.reviewed_at }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
