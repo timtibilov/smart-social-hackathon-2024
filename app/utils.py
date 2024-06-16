@@ -35,8 +35,11 @@ def send_confirmation_email(order):
     You can view your order using the following link:
     {url_for('order.detail', order_id=order.id, _external=True)}
     
-    You can edit or cancel your order using the following link:
+    You can edit your order using the following link:
     {url_for('order.edit', token=edit_token, _external=True)}
+    
+    You can request for a refund using the following link:
+    {url_for('staff.request_refund', token=edit_token, _external=True)}
 
     Best regards,
     Your Museum Team

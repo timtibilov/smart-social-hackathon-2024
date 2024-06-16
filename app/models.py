@@ -102,3 +102,12 @@ class Order(db.Model):
 
     def is_expired(self):
         return datetime.now(timezone.utc) > self.expires_at and self.status == 'pending'
+    
+class RefundRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    requested_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    status = db.Column(db.String(20), nullable=False, default='pending')  # 'pending', 'approved', 'rejected'
+    reviewed_at = db.Column(db.DateTime)
+    
+    order = db.relationship('Order', backref='refund_requests')
