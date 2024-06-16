@@ -1,7 +1,8 @@
 from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from flask_login import login_required
-from app.models import Event, EventDate, db
+from app.models import Event, EventDate, Order
+from app import db
 from app.utils import fetch_and_parse_xml, add_events_to_db
 
 bp = Blueprint('event', __name__, url_prefix='/events')
@@ -93,3 +94,44 @@ def delete(event_id):
     db.session.commit()
     flash('Event deleted successfully!', 'success')
     return redirect(url_for('event.index'))
+
+@bp.route('/<int:event_id>/order', methods=['GET', 'POST'])
+def order(event_id):
+    if request.method == 'POST':
+        event_id = request.form['event_id']
+        event_date_id = request.form['event_date_id']
+        visitor_name = request.form['visitor_name']
+        visitor_email = request.form['visitor_email']
+        visitor_phone = request.form['visitor_phone']
+        ticket_count = int(request.form['ticket_count'])
+
+        if ticket_count > 5:
+            flash('You cannot purchase more than 5 tickets in one order.', 'warning')
+            return redirect(url_for('event.order'))
+
+        # Проверяем, доступны ли места
+        event_date = EventDate.query.get(event_date_id)
+        available_seats = event_date.available_seats - Order.query.filter_by(event_date_id=event_date_id, status='pending')
+
+        if ticket_count > available_seats:
+            flash('Not enough seats available.', 'danger')
+            return redirect(url_for('order.order'))
+
+        order = Order(
+            event_id=event_id,
+            event_date_id=event_date_id,
+            visitor_name=visitor_name,
+            visitor_email=visitor_email,
+            visitor_phone=visitor_phone,
+            ticket_count=ticket_count
+        )
+        order.reserve()
+
+        db.session.add(order)
+        db.session.commit()
+
+        flash('Order created successfully! Please confirm your order within 20 minutes.', 'success')
+        return redirect(url_for('order.detail', order_id=order.id))
+
+    event = Event.query.get_or_404(event_id)
+    return render_template('order/create.html', event=event)

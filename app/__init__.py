@@ -18,19 +18,18 @@ def create_app():
     login_manager.login_view = 'auth.login'
     
     with app.app_context():
+        from .models import Event, EventDate, EventImage, MuseumStaff, Order, RefundRequest
+        db.create_all()  # Создаем таблицы в базе данных
+
         from .routes import (
             event_routes, 
-            registration_routes, 
             staff_routes, 
             auth_routes, 
             order_routes)
         
         app.register_blueprint(event_routes.bp)
-        app.register_blueprint(registration_routes.bp)
         app.register_blueprint(order_routes.bp)
         app.register_blueprint(staff_routes.bp)
         app.register_blueprint(auth_routes.bp)
-        
-        db.create_all()  # Создаем таблицы в базе данных
-        
+                
     return app

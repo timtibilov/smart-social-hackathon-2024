@@ -25,5 +25,7 @@
             </li>
         {% endfor %}
     </ul>
+    <h5><a href="{{ url_for('event.order', event_id=event.id) }}">Купить билеты</a></h5>
+    <h5><a href="{{ url_for('event.edit', event_id=event.id) }}">Редактировать</a></h5>
 </div>
 {% endblock %}

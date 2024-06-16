@@ -1,18 +1,22 @@
-{% extends "../base.html" %}
+{% extends "base.html" %}
 {% block title %}Create Order{% endblock %}
 {% block content %}
     <div class="container mt-4">
-        <h2 class="mb-4">Create Order</h2>
+        <h2 class="mb-4">Создать заказ на {{ event.name }}</h2>
+        <p>{{ event.description }}</p>
+        <p><strong>Place:</strong> {{ event.place }}</p>
+        <p><strong>Visitor Count:</strong> {{ event.visitor_count }}</p>
 
-        <form method="POST">
-            <div class="mb-3">
-                <label for="event_id" class="form-label">Event:</label>
-                <select id="event_id" name="event_id" class="form-select" required>
-                    {% for event in events %}
-                        <option value="{{ event.id }}">{{ event.name }}</option>
-                    {% endfor %}
-                </select>
+        {% if event.images %}
+            <div class="row event-gallery">
+                {% for image in event.images %}
+                    <div class="col-md-4">
+                        <img src="{{ image.image_url }}" alt="Event Image" class="img-fluid mb-3">
+                    </div>
+                {% endfor %}
             </div>
+        {% endif %}
+        <form method="POST">
             <div class="mb-3">
                 <label for="event_date_id" class="form-label">Event Date:</label>
                 <select id="event_date_id" name="event_date_id" class="form-select" required>
