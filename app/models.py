@@ -36,6 +36,7 @@ class EventDate(db.Model):
 
 class MuseumStaff(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    is_active = db.Column(db.Boolean)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     phone = db.Column(db.String(20), nullable=False)

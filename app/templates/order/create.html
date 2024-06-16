@@ -20,11 +20,9 @@
             <div class="mb-3">
                 <label for="event_date_id" class="form-label">Event Date:</label>
                 <select id="event_date_id" name="event_date_id" class="form-select" required>
-                    {% for event in events %}
                         {% for date in event.dates %}
                             <option value="{{ date.id }}">{{ date.date_time }}</option>
                         {% endfor %}
-                    {% endfor %}
                 </select>
             </div>
             <div class="mb-3">
