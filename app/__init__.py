@@ -97,11 +97,13 @@ def create_app():
         # db.session.commit()
 
         from .routes import (
+            bp,
             event_routes, 
             staff_routes, 
             auth_routes, 
             order_routes)
         
+        app.register_blueprint(bp)
         app.register_blueprint(event_routes.bp)
         app.register_blueprint(order_routes.bp)
         app.register_blueprint(staff_routes.bp)
