@@ -40,7 +40,7 @@ def request_refund(token):
     if not order_id:
         flash('Invalid or expired token.', 'danger')
         return redirect(url_for('order.check_order'))
-    
+
     order = Order.query.get_or_404(order_id)
     if request.method == 'POST':
         refund_request = RefundRequest(order_id=order.id)

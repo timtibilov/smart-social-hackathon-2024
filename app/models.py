@@ -1,9 +1,6 @@
 from datetime import datetime, timedelta, timezone
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-db = SQLAlchemy()
+from app import db
 
 class EventImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
